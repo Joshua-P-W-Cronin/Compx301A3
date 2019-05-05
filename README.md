@@ -1,5 +1,8 @@
 # Compx301A3
+_______
+Assignment description:
 
+https://www.cs.waikato.ac.nz/~tcs/COMPX301/assign3-2019.html
 _______
 
 Google Doc:
