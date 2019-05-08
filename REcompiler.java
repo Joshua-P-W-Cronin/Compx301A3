@@ -86,7 +86,7 @@ public class REcompiler {
         if(j<p.length){
           if (p[j] == '*') {
               j++;
-              setState(state, BR, t1, state + 1);
+              setState(state, BR, state + 1, t1);
               r = state;
               state++;
           }
