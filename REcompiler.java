@@ -38,9 +38,18 @@ public class REcompiler {
     public static void printMachine(){
       System.out.println("s  ch 1 2");
       System.out.println("--+--+-+-+");
-      for(int i = 0; i<100; i++){
+
+      int i = 0;
+
+      //Look into this and why it doesnt work with ints
+      do{
+          System.out.println(String.format("%1s | %2s %3s %4s", i, ch[i], next1[i], next2[i]));
+          i++;
+      }while(!((Integer.toString(next1[i]).equals("0")) && (Integer.toString(next2[i]).equals("0"))));
         System.out.println(String.format("%1s | %2s %3s %4s", i, ch[i], next1[i], next2[i]));
-      }
+
+
+
     }
 
     public static int factor() {
@@ -82,6 +91,7 @@ public class REcompiler {
     public static int term() {
         int f, r, t1, t2;
         f = state - 1;
+
         r = t1 = factor();
         if(j<p.length){
           if (p[j] == '*') {
@@ -91,11 +101,21 @@ public class REcompiler {
               state++;
           }
           if (p[j] == '|') {
+              //Special case for if it starts with an or statement
+              if(f == -1){
+                  System.out.println(state);
+                  setState(state, BR, 1, 1);
+
+                  System.out.println(r);
+                  f = 0;
+              }
+              System.out.println(f);
               if (next1[f] == next2[f]) {
                   next2[f] = state;
               }
 
               next1[f] = state;
+
               f = state - 1;
               j++;
               r = state;
