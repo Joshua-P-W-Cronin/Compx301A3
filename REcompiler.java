@@ -11,7 +11,8 @@ public class REcompiler {
     //Current State
     static int state;
     //Branching state
-    static final char BR = '\0';
+	//static final char BR = '!';	
+	static final char BR = '\0';
 
     public static void main(String[] args) {
         p = args[0].toCharArray();
@@ -31,7 +32,9 @@ public class REcompiler {
       initial = expression();
       //if (p[j])
       // error(); // In C, zero is false, not zero is true
-      setState(state, ' ', 0, 0);
+      setState(state, '\0', 0, 0);
+	  //setState(state, ' ', 0, 0);
+	  
       System.out.println("starting state = " + initial);
     }
 
@@ -47,6 +50,7 @@ public class REcompiler {
           i++;
       }while(!((Integer.toString(next1[i]).equals("0")) && (Integer.toString(next2[i]).equals("0"))));
         System.out.println(String.format("%1s | %2s %3s %4s", i, ch[i], next1[i], next2[i]));
+		
 
 
 
@@ -103,13 +107,13 @@ public class REcompiler {
           if (p[j] == '|') {
               //Special case for if it starts with an or statement
               if(f == -1){
-                  System.out.println(state);
+      
                   setState(state, BR, 1, 1);
 
-                  System.out.println(r);
+  
                   f = 0;
               }
-              System.out.println(f);
+
               if (next1[f] == next2[f]) {
                   next2[f] = state;
               }
