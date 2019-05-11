@@ -13,6 +13,17 @@ public class REsearcherL{
 		for(int[] state : stateData){
 			System.out.println(state[0] + ", " +state[1]+ ", " + state[2]);
 		}
+		
+		Search s = new Search(stateData, startingState);
+		
+		
+		if(s.searchString("Hellozzzj")){
+			System.out.println("hello");
+		}
+		else{
+			System.out.println("Not found");
+		}
+		
 
 		
 		
@@ -76,6 +87,9 @@ public class REsearcherL{
 		
 
 	}
-		
+			
 	
 }
+
+
+		
