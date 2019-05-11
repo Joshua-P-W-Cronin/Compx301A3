@@ -16,9 +16,10 @@ public class REsearcherL{
 		
 		Search s = new Search(stateData, startingState);
 		
+		String pattern = "Hellozzzjacd";
 		
-		if(s.searchString("Hellozzzj")){
-			System.out.println("hello");
+		if(s.searchString(pattern)){
+			System.out.println(pattern);
 		}
 		else{
 			System.out.println("Not found");

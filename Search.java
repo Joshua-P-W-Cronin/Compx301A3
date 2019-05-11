@@ -36,7 +36,7 @@ public class Search{
 		}
 
 		if((stateData[stateIndex][1] + stateData[stateIndex][2]) != 0){
-			if((int)input[charIndex] == stateData[stateIndex][0] || stateData[startIndex][0] == 0){
+			if((int)input[charIndex] == stateData[stateIndex][0] || stateData[stateIndex][0] == 0){
 				if(checkState(stateData[stateIndex][1], charIndex++)){
 					return true;
 				}
@@ -45,6 +45,9 @@ public class Search{
 				}
 				return false;
 				
+			}
+			else{
+				return false;
 			}
 		}
 		else if(stateData[stateIndex][0] == 0 && stateData[stateIndex][1] == 0 && stateData[stateIndex][2] == 0){
