@@ -22,6 +22,7 @@ public class REcompiler {
         ch = new char[100];
         state = 0;
         parse();
+
         printMachine();
     }
 
@@ -30,6 +31,9 @@ public class REcompiler {
       int initial;
 
       initial = expression();
+       if(j!= p.length){
+          error();
+        }
       //if (p[j])
       // error(); // In C, zero is false, not zero is true
       setState(state, '\0', 0, 0);
@@ -57,7 +61,7 @@ public class REcompiler {
     }
 
     public static int factor() {
-      System.out.println(p[j]);
+      
         int r = 0;
         if (isVocab(p[j])) {
             setState(state, p[j], state + 1, state + 1);
