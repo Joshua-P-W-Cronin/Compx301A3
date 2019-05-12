@@ -57,6 +57,7 @@ public class REcompiler {
     }
 
     public static int factor() {
+      
         int r = 0;
         if (isVocab(p[j])) {
             setState(state, p[j], state + 1, state + 1);
@@ -65,7 +66,18 @@ public class REcompiler {
             state++;
             return r;
         }
-        if (p[j] == '(') {
+        //Special case if p[j] is an escape character, move over it and consume the next character no matter what it is. 
+        else if(p[j] == '\\'){
+            //consume the '\'
+            j++;
+            //Set the state machine with whatever matches next
+            setState(state, p[j], state + 1, state + 1);
+            j++;
+            r = state;
+            state++;
+            return r;
+        }
+        else if (p[j] == '(') {
             j++;
             r = expression();
             if (p[j] == ')') {
@@ -75,6 +87,8 @@ public class REcompiler {
                 error();
             }
         }
+        
+
         return r;
     }
 
@@ -84,8 +98,11 @@ public class REcompiler {
         int r;
         r = term();
         if (j < p.length) {
-          if (isVocab(p[j]) || p[j] == '(') {
+          if (isVocab(p[j]) || p[j] == '(' || p[j] =='\\') {
             expression();
+          }
+          else{
+            error();
           }
         }
         return r;
@@ -145,7 +162,7 @@ public class REcompiler {
 
 
     public static void error(){
-        System.out.println("Regular expression invalid");
+        System.err.println("Regular expression invalid");
         System.exit(0);
 
     }
