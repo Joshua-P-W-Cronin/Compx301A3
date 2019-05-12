@@ -50,10 +50,10 @@ public class REcompiler {
 
       //Look into this and why it doesnt work with ints
       do{
-          System.out.println(String.format("%1s | %2s %3s %4s", i, ch[i], next1[i], next2[i]));
+          System.out.println(String.format("%1s|%2s %3s %4s", i, ch[i], next1[i], next2[i]));
           i++;
       }while(!((Integer.toString(next1[i]).equals("0")) && (Integer.toString(next2[i]).equals("0"))));
-        System.out.println(String.format("%1s | %2s %3s %4s", i, ch[i], next1[i], next2[i]));
+        System.out.println(String.format("%1s|%2s %3s %4s", i, ch[i], next1[i], next2[i]));
 		
 
 
@@ -122,6 +122,7 @@ public class REcompiler {
         f = state - 1;
 
         r = t1 = factor();
+        System.out.println(t1);
         if(j<p.length){
           if (p[j] == '*') {
               j++;
@@ -133,7 +134,11 @@ public class REcompiler {
             //similar to * but need to change previous state to go to state if it matches, 
             j++;
             setState(state, BR, state + 1, t1);
-            next1[r] = next2[r] = state +1;
+            if(f<0){f=0;}
+            //update the state before the questionmark to exit
+            next1[state-1] = next2[state-1] = state +1;
+            //update the state before the state to point ot the branch
+            //next1[r] = next2[r] = state;
             r = state;
             state++;
           }
