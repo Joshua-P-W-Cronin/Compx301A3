@@ -129,6 +129,14 @@ public class REcompiler {
               r = state;
               state++;
           }
+          else if(p[j] == '?'){
+            //similar to * but need to change previous state to go to state if it matches, 
+            j++;
+            setState(state, BR, state + 1, t1);
+            next1[r] = next2[r] = state +1;
+            r = state;
+            state++;
+          }
           else if (p[j] == '|') {
               //Special case for if it starts with an or statement
               if(f == -1){
