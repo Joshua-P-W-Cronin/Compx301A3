@@ -34,7 +34,7 @@ public class REcompiler {
       // error(); // In C, zero is false, not zero is true
       setState(state, '\0', 0, 0);
 	  //setState(state, ' ', 0, 0);
-	  
+	   
       System.out.println("starting state = " + initial);
     }
 
@@ -57,7 +57,7 @@ public class REcompiler {
     }
 
     public static int factor() {
-      
+      System.out.println(p[j]);
         int r = 0;
         if (isVocab(p[j])) {
             setState(state, p[j], state + 1, state + 1);
@@ -80,12 +80,16 @@ public class REcompiler {
         else if (p[j] == '(') {
             j++;
             r = expression();
-            if (p[j] == ')') {
+            //Need to check the length of j here else we will go off the edge. 
+            if (j< p.length && p[j] == ')') {
                 j++;
             }
             else {
                 error();
             }
+        }
+        else{
+           error();
         }
         
 
@@ -102,7 +106,7 @@ public class REcompiler {
             expression();
           }
           else{
-            error();
+            //error();
           }
         }
         return r;
@@ -121,7 +125,7 @@ public class REcompiler {
               r = state;
               state++;
           }
-          if (p[j] == '|') {
+          else if (p[j] == '|') {
               //Special case for if it starts with an or statement
               if(f == -1){
       
