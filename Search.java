@@ -34,12 +34,15 @@ public class Search{
 	}
 	
 	public Boolean checkState(int stateIndex, int charIndex){
+		if(stateString[stateIndex].equals("WILDCARD")){
+			charIndex += 1;
+		}
 		if(charIndex >= input.length){
 			return false;
 		}
 
 		if((stateData[stateIndex][0] + stateData[stateIndex][1]) != 0){
-			if(Character.toString(input[charIndex]).equals(stateString[stateIndex]) || stateString[stateIndex].equals("BRANCH")){
+			if(Character.toString(input[charIndex]).equals(stateString[stateIndex]) || stateString[stateIndex].equals("BRANCH") ||stateString[stateIndex].equals("WILDCARD") ){	
 				if(checkState(stateData[stateIndex][0], charIndex++)){
 					return true;
 				}

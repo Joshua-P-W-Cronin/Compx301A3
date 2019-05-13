@@ -1,6 +1,7 @@
 ///SPECIAL STRINGS
 /// "END" -> end of finitite state machine
 /// "BRANCH" -> Branching state, not gonna look for a match
+/// "WILDCARD" = "." -> Matches anything
 
 
 
@@ -100,7 +101,19 @@ public class REcompiler {
                 error();
             }
         }
+		//WILDCARD
+		else if(p[j] == '.'){
+			
+			setState(state, "WILDCARD", state + 1, state + 1);
+            j++;
+            r = state;
+            state++;
+            return r;
+        }
+			
+		
         else{
+			System.out.print(p[j]);
            error();
         }
         
@@ -114,7 +127,7 @@ public class REcompiler {
         int r;
         r = term();
         if (j < p.length) {
-          if (isVocab(p[j]) || p[j] == '(' || p[j] =='\\') {
+          if (isVocab(p[j]) || p[j] == '(' || p[j] =='\\' || p[j] == '.') {
             expression();
           }
           else{
