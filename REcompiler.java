@@ -7,19 +7,19 @@ public class REcompiler {
     //Lists of states
     static int[] next1, next2;
     //list of chars
-    static char[] ch;
+    static String[] ch;
     //Current State
     static int state;
     //Branching state
 	//static final char BR = '!';	
-	static final char BR = '\0';
+	static final String BR = "BRANCH";
 
     public static void main(String[] args) {
         p = args[0].toCharArray();
         j = 0;
         next1 = new int[100];
         next2 = new int[100];
-        ch = new char[100];
+        ch = new String[100];
         state = 0;
         parse();
 
@@ -36,7 +36,7 @@ public class REcompiler {
         }
       //if (p[j])
       // error(); // In C, zero is false, not zero is true
-      setState(state, '\0', 0, 0);
+      setState(state, "END", 0, 0);
 	  //setState(state, ' ', 0, 0);
 	   
       System.out.println("starting state = " + initial);
@@ -49,11 +49,11 @@ public class REcompiler {
       int i = 0;
 
       //Look into this and why it doesnt work with ints
-      do{
-          System.out.println(String.format("%1s|%2s %3s %4s", i, ch[i], next1[i], next2[i]));
+      while(!(ch[i].equals("END"))){
+          System.out.println(String.format("%1s|%10s %3s %4s", i, ch[i], next1[i], next2[i]));
           i++;
-      }while(!((Integer.toString(next1[i]).equals("0")) && (Integer.toString(next2[i]).equals("0"))));
-        System.out.println(String.format("%1s|%2s %3s %4s", i, ch[i], next1[i], next2[i]));
+      }
+        System.out.println(String.format("%1s|%10s %3s %4s", i, ch[i], next1[i], next2[i]));
 		
 
 
@@ -64,7 +64,7 @@ public class REcompiler {
       
         int r = 0;
         if (isVocab(p[j])) {
-            setState(state, p[j], state + 1, state + 1);
+            setState(state, Character.toString(p[j]), state + 1, state + 1);
             j++;
             r = state;
             state++;
@@ -75,7 +75,7 @@ public class REcompiler {
             //consume the '\'
             j++;
             //Set the state machine with whatever matches next
-            setState(state, p[j], state + 1, state + 1);
+            setState(state, Character.toString(p[j]), state + 1, state + 1);
             j++;
             r = state;
             state++;
@@ -122,7 +122,7 @@ public class REcompiler {
         f = state - 1;
 
         r = t1 = factor();
-        System.out.println(t1);
+        //System.out.println(t1);
         if(j<p.length){
           if (p[j] == '*') {
               j++;
@@ -175,7 +175,7 @@ public class REcompiler {
     }
 
 
-    public static void setState(int s, char c, int s1, int s2) {
+    public static void setState(int s, String c, int s1, int s2) {
         ch[s] = c;
         next1[s] = s1;
         next2[s] = s2;

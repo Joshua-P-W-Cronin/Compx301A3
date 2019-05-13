@@ -2,19 +2,23 @@ import java.util.Scanner;
 
 public class REsearcherL{
 	static int[][] stateData;
+	static String[] stateString;
 	static int startingState;
 	
 	public static void main(String[] args){
 		
-		stateData = new int[100][3];
+		stateData = new int[100][2];
+		stateString = new String[100];
 		makeStateArray();
 		
-		
-		for(int[] state : stateData){
-			System.out.println(state[0] + ", " +state[1]+ ", " + state[2]);
+		for(int i =0; i < stateData.length; i++){
+			System.out.println(stateString[i] + ", " +stateData[i][0]+ ", " + stateData[i][1]);
 		}
+		// for(int[] state : stateData){
+			// System.out.println(state[0] + ", " +state[1]+ ", " + state[2]);
+		// }
 		
-		Search s = new Search(stateData, startingState);
+		Search s = new Search(stateData, stateString, startingState);
 		
 		String pattern = "Hellozzzjacd";
 		
@@ -51,10 +55,11 @@ public class REsearcherL{
 				}
 				else{
 					input = input.replaceAll("\\s{2,}", " ");
-					//System.out.println(input);
-					stateData[indexArray][0] = (int)(input.split(" ")[2].charAt(0));
+					// System.out.println(input);
+					stateString[indexArray] = (input.split(" ")[1]);
+					// System.out.println((input.split(" ")[1]));
+					stateData[indexArray][0] = Integer.parseInt(input.split(" ")[2]);
 					stateData[indexArray][1] = Integer.parseInt(input.split(" ")[3]);
-					stateData[indexArray][2] = Integer.parseInt(input.split(" ")[4]);
 					indexArray ++;
 				}
 				
@@ -72,19 +77,23 @@ public class REsearcherL{
 		
 		//Trim the state array
 		int size = 0;
-		for(int[] state : stateData){
-			size ++;
-			if(state[0] + state[1] + state[2]  == 0){
+		for(String state : stateString){
+			size ++;			
+			if(state.equals("END")){
 				break;
 			}
 		}
+
 		
-		int[][] temp = new int[size][3];
+		int[][] temp = new int[size][2];
+		String[] temp2 = new String[size];
 		
 		for(int i =0; i < size; i++){
 			temp[i] = stateData[i];
+			temp2[i] = stateString[i];
 		}
 		stateData = temp;
+		stateString = temp2;
 		
 
 	}
