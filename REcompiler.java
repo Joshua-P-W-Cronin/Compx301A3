@@ -1,3 +1,11 @@
+///SPECIAL STRINGS
+/// "END" -> end of finitite state machine
+/// "BRANCH" -> Branching state, not gonna look for a match
+
+
+
+
+
 public class REcompiler {
 
     //Regular expression phrase
