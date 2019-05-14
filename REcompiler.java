@@ -147,9 +147,17 @@ public class REcompiler {
         r = t1 = factor();
         //System.out.println(t1);
         if(j<p.length){
-          if (p[j] == '*') {
+          if (p[j] == '*'){
               j++;
               setState(state, BR, state + 1, t1);
+              
+              //Special case for if it starts with an or statement
+              if(f != -1){
+                  next1[f] = next2[f] = state+1;
+              }
+
+              
+              
               r = state;
               state++;
           }
@@ -158,6 +166,11 @@ public class REcompiler {
             j++;
             //set the current state as a simple dummy state, which will skip over the next state to the end
             setState(state, BR, state + 2, state +2);
+            //Special case for if it starts with an or statement
+            
+            if(f != -1){
+                next1[f] = next2[f] = state;
+            }
             state++;
             //set the next state, which will be the statring state of the machine, to branch to the end or the start of the previously set machine. 
             setState(state, BR, r, state +1);
@@ -192,6 +205,8 @@ public class REcompiler {
 
               }
               next1[f] = state;
+              setState(state, BR, state +1, state +1);
+              state ++;
           }
         }
         return r;
