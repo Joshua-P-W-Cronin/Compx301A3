@@ -153,7 +153,7 @@ public class REcompiler {
             j++;
             r = state;
             state++;
-            t2 = term();
+            t2 = expression();
             setState(r, BR, t1, t2);
             if (next1[f] == next2[f]) {
                 next2[f] = state;
