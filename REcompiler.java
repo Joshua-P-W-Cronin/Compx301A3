@@ -125,15 +125,16 @@ public class REcompiler {
     public static int expression() {
 
         int r;
-        r = term();
+        int t1;
+        r = t1= term();
         if (j < p.length) {
           if (isVocab(p[j]) || p[j] == '(' || p[j] =='\\' || p[j] == '.') {
             expression();
           }
           else if (p[j] == '|') {
-            int f, t1, t2;
+            int f, t2;
             f = state -1;
-            t1 = r;
+            
             //Special case for if it starts with an or statement
             if(f == -1){
     
@@ -153,7 +154,7 @@ public class REcompiler {
             j++;
             r = state;
             state++;
-            t2 = expression();
+            t2 = term();
             setState(r, BR, t1, t2);
             if (next1[f] == next2[f]) {
                 next2[f] = state;
