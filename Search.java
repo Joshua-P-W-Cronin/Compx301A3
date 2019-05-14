@@ -1,17 +1,20 @@
 public class Search{
 	
 	public int [][] stateData;
+	public String[] stateString;
 	public int startIndex;
 	public int j;
 	char[] input;
 	
 	
 	
-	public Search(int[][] states, int startI){
+	public Search(int[][] states, String[] strings, int startI){
 		
 		stateData = states;
+		stateString = strings;
 		startIndex = startI;	
 		input = new char[0];
+		
 	}
 	
 	
@@ -31,16 +34,19 @@ public class Search{
 	}
 	
 	public Boolean checkState(int stateIndex, int charIndex){
+		if(stateString[stateIndex].equals("WILDCARD")){
+			charIndex += 1;
+		}
 		if(charIndex >= input.length){
 			return false;
 		}
 
-		if((stateData[stateIndex][1] + stateData[stateIndex][2]) != 0){
-			if((int)input[charIndex] == stateData[stateIndex][0] || stateData[stateIndex][0] == 0){
-				if(checkState(stateData[stateIndex][1], charIndex++)){
+		if((stateData[stateIndex][0] + stateData[stateIndex][1]) != 0){
+			if(Character.toString(input[charIndex]).equals(stateString[stateIndex]) || stateString[stateIndex].equals("BRANCH") ||stateString[stateIndex].equals("WILDCARD") ){	
+				if(checkState(stateData[stateIndex][0], charIndex++)){
 					return true;
 				}
-				if(checkState(stateData[stateIndex][2], charIndex++)){
+				if(checkState(stateData[stateIndex][1], charIndex++)){
 					return true;
 				}
 				return false;
@@ -50,7 +56,7 @@ public class Search{
 				return false;
 			}
 		}
-		else if(stateData[stateIndex][0] == 0 && stateData[stateIndex][1] == 0 && stateData[stateIndex][2] == 0){
+		else if(stateString[stateIndex].equals("END") && stateData[stateIndex][0] == 0 && stateData[stateIndex][1] == 0){
 			System.out.println("match");
 			return true;
 		}
