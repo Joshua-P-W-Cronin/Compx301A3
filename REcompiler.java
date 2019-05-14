@@ -134,11 +134,14 @@ public class REcompiler {
             //similar to * but need to change previous state to go to state if it matches, 
             j++;
             setState(state, BR, state + 1, t1);
-            if(f<0){f=0;}
+            
             //update the state before the questionmark to exit
             next1[state-1] = next2[state-1] = state +1;
             //update the state before the state to point ot the branch
-            //next1[r] = next2[r] = state;
+            if((t1-1)>=0){
+                next1[t1-1] = next2[t1-1] = state;
+            }
+            //
             r = state;
             state++;
           }
