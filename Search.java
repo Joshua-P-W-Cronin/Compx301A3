@@ -16,6 +16,83 @@ public class Search{
 		input = new char[0];
 		
 	}
+
+
+	public Boolean searchWithDeque(String s){
+
+		input = s.toCharArray();
+
+
+		for(int i = 0; i <= input.length; i++){
+			System.out.println("new deque");
+			if(checkDeque(new Deque(startIndex), i)){
+				return true;
+			}
+		}
+
+		return false;
+
+
+	}
+
+
+
+	public Boolean checkDeque(Deque d, int charIndex){
+
+		d.print();
+		while(d.head != null){
+			int head = d.get();
+
+			if (stateString[head].equals("END")) {
+				System.out.println("Match");
+				return true;
+			}
+
+			if (charIndex >= input.length) {
+				return false;
+			}
+
+
+			if (stateString[head].equals("BRANCH")) {
+				d.push(stateData[head][1]);
+				if (stateData[head][0] != stateData[head][1]) {
+					d.push(stateData[head][0]);
+				}
+				d.print();
+				continue;
+			}
+
+
+//			if (stateString[head].equals("WILDCARD")) {
+//				charIndex++;
+//				d.enque(stateData[head][0]);
+//				if (stateData[head][0] != stateData[head][1]) {
+//					d.enque(stateData[head][1]);
+//				}
+//				d.print();
+//				continue;
+//			}
+
+
+			if(Character.toString(input[charIndex]).equals(stateString[head]) || stateString[head].equals("WILDCARD")){
+				charIndex++;
+				d.enque(stateData[head][0]);
+				if (stateData[head][0] != stateData[head][1]) {
+					d.enque(stateData[head][1]);
+				}
+				d.print();
+				continue;
+			}
+
+
+
+		}
+
+		return false;
+
+	}
+
+
 	
 	
 	public Boolean searchString(String s){
@@ -24,6 +101,7 @@ public class Search{
 		
 		
 		for(int i =0; i <= input.length; i++){
+
 			if(checkState(startIndex, i)){
 				return true;
 			}

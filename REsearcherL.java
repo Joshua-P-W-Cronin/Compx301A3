@@ -22,7 +22,18 @@ public class REsearcherL{
 		
 		String pattern = "Hellozzzjacd";
 		
-		if(s.searchString(pattern)){
+//		if(s.searchString(pattern)){
+//			System.out.println(pattern);
+//		}
+//		else{
+//			System.out.println("Not found");
+//		}
+
+		System.out.println("##########################################################################################");
+		System.out.println("chech with dick");
+		System.out.println("##########################################################################################");
+
+		if(s.searchWithDeque(pattern)){
 			System.out.println(pattern);
 		}
 		else{

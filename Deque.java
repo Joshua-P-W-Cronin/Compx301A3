@@ -10,13 +10,17 @@ public class Deque{
 
 
     public int get(){
-        int state = head.getState);
+        int state = head.getState();
         head = head.next();
         return state;
     }
 
 
-    public void push(int state){
+    public void enque(int state){
+        if (head == null){
+            head = new DNode(state);
+            return;
+        }
         DNode cur = head;
         while(cur.next() != null){
             cur = cur.next();
@@ -25,8 +29,8 @@ public class Deque{
 
     }
 
-    public void pop(int state){
-        Dnode next = new Dnode(state);
+    public void push(int state){
+        DNode next = new DNode(state);
         next.setNext(head);
         head = next;
     }
@@ -34,9 +38,9 @@ public class Deque{
     public void print(){
 
         String p = "";
-        Dnode cur= head;
+        DNode cur = head;
         while(cur.next != null){
-            p += Integer.toString(cur.getState()) + ",";
+            p += Integer.toString(cur.getState()) + ", ";
             cur = cur.next();
         }
         p += Integer.toString(cur.getState());
@@ -53,7 +57,7 @@ public class Deque{
 class DNode{
 
     int state;
-    DNode next;
+    DNode next = null;
 
     public DNode(int state){
         this.state = state;
@@ -65,7 +69,7 @@ class DNode{
         return state;
     }
 
-    public void setNext(Dnode d){
+    public void setNext(DNode d){
         next = d;
     }
 
