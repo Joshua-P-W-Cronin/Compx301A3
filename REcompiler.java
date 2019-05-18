@@ -21,6 +21,8 @@ public class REcompiler {
     static int state;
     //Branching state
     static int enter = 0;
+    static int start = 0;
+    static boolean startSet = false;
     static boolean newEnter = false;
 	//static final char BR = '!';	
 	static final String BR = "BRANCH";
@@ -120,7 +122,7 @@ public class REcompiler {
         }
 
         else{
-			System.out.print(p[j]);
+			
            error();
         }
         
@@ -134,6 +136,10 @@ public class REcompiler {
         int r;
         int t1;
         r = t1= term();
+        if (!startSet){
+          start = r;
+          startSet = true;
+        }
         if (j < p.length) {
           if (isVocab(p[j]) || p[j] == '(' || p[j] =='\\' || p[j] == '.') {
            enter = expression();
@@ -141,11 +147,14 @@ public class REcompiler {
             r = enter;
            }
 
+
           }
           else if (p[j] == '|') {
             int f, t2;
-            f = state -1;
             
+            setState(state, BR, state+1, state+1);
+            state++;
+            f = state -1;
             //Special case for if it starts with an or statement
             if(f == -1){
     
@@ -166,7 +175,7 @@ public class REcompiler {
             r = state;
             state++;
             t2 = term();
-            setState(r, BR, t1, t2);
+            setState(r, BR, start, t2);
             
             if (next1[f] == next2[f]) {
                 next2[f] = state;
@@ -177,6 +186,7 @@ public class REcompiler {
             newEnter = true;
           }
         }
+        
         return r;
     }
 
