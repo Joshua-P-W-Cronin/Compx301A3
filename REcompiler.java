@@ -20,6 +20,7 @@ public class REcompiler {
     //Current State
     static int state;
     //Branching state
+    static int last = 0;
 	//static final char BR = '!';	
 	static final String BR = "BRANCH";
 
@@ -74,6 +75,7 @@ public class REcompiler {
         int r = 0;
         if (isVocab(p[j])) {
             setState(state, Character.toString(p[j]), state + 1, state + 1);
+            last = state;
             j++;
             r = state;
             state++;
@@ -86,6 +88,7 @@ public class REcompiler {
             //Set the state machine with whatever matches next
             setState(state, Character.toString(p[j]), state + 1, state + 1);
             j++;
+            last = state;
             r = state;
             state++;
             return r;
@@ -106,6 +109,7 @@ public class REcompiler {
 			
 			setState(state, "WILDCARD", state + 1, state + 1);
             j++;
+            last = state;
             r = state;
             state++;
             return r;
@@ -156,6 +160,7 @@ public class REcompiler {
             state++;
             t2 = term();
             setState(r, BR, t1, t2);
+            last = r;
             if (next1[f] == next2[f]) {
                 next2[f] = state;
 
@@ -172,13 +177,20 @@ public class REcompiler {
         f = state - 1;
 
         r = t1 = factor();
+        last = r;
         //System.out.println(t1);
         if(j<p.length){
           if (p[j] == '*') {
               j++;
               setState(state, BR, state + 1, t1);
+              if(f>= 0)
+              {
+                  
+                  next1[f] = next2[f] = state;
+              }
               r = state;
               state++;
+              
           }
           else if(p[j] == '?'){
             //similar to * but need to change previous state to go to state if it matches,
@@ -187,8 +199,12 @@ public class REcompiler {
             setState(state, BR, state + 2, state +2);
             state++;
             //set the next state, which will be the statring state of the machine, to branch to the end or the start of the previously set machine. 
-            setState(state, BR, r, state +1);
-
+            setState(state, BR, state +1, r);
+            if(f>= 0)
+              {
+                  
+                  next1[f] = next2[f] = state;
+              }
             r = state;
             state++;
           }
