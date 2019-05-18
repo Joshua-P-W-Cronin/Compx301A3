@@ -125,7 +125,11 @@ public class REcompiler {
 
     else if(p[j] == '['){
       j++;
+      if(j >= p.length){
+          error();
+        }
       currList = "LIST" + p[j];
+
       j++;
       list();
 
@@ -143,10 +147,16 @@ public class REcompiler {
 
     //notlist
     else if(p[j] == '^'){
+
       j++;
+      if(j >= p.length){
+          error();
+        }
       if(p[j] =='['){
         j++;
-        //if(j >=)
+        if(j >= p.length){
+          error();
+        }
         currList = "NOTLIST" + p[j];
         j++;
         list();
