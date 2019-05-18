@@ -19,9 +19,13 @@ public class REcompiler {
     static String[] ch;
     //Current State
     static int state;
+    //start state of preceding machine
+    static int preceding;
     //Branching state
+
     static int last = 0;
 	//static final char BR = '!';	
+
 	static final String BR = "BRANCH";
 
     public static void main(String[] args) {
@@ -48,7 +52,7 @@ public class REcompiler {
       // error(); // In C, zero is false, not zero is true
       setState(state, "END", 0, 0);
 	  //setState(state, ' ', 0, 0);
-	   
+
       System.out.println("starting state = " + initial);
     }
 
@@ -64,14 +68,14 @@ public class REcompiler {
           i++;
       }
         System.out.println(String.format("%1s|%10s %3s %4s", i, ch[i], next1[i], next2[i]));
-		
+
 
 
 
     }
 
     public static int factor() {
-      
+
         int r = 0;
         if (isVocab(p[j])) {
             setState(state, Character.toString(p[j]), state + 1, state + 1);
@@ -81,7 +85,7 @@ public class REcompiler {
             state++;
             return r;
         }
-        //Special case if p[j] is an escape character, move over it and consume the next character no matter what it is. 
+        //Special case if p[j] is an escape character, move over it and consume the next character no matter what it is.
         else if(p[j] == '\\'){
             //consume the '\'
             j++;
@@ -96,7 +100,7 @@ public class REcompiler {
         else if (p[j] == '(') {
             j++;
             r = expression();
-            //Need to check the length of j here else we will go off the edge. 
+            //Need to check the length of j here else we will go off the edge.
             if (j< p.length && p[j] == ')') {
                 j++;
             }
@@ -106,7 +110,7 @@ public class REcompiler {
         }
 		//WILDCARD
 		else if(p[j] == '.'){
-			
+
 			setState(state, "WILDCARD", state + 1, state + 1);
             j++;
             last = state;
@@ -114,13 +118,13 @@ public class REcompiler {
             state++;
             return r;
         }
-			
-		
+
+
         else{
 			System.out.print(p[j]);
            error();
         }
-        
+
 
         return r;
     }
@@ -180,14 +184,20 @@ public class REcompiler {
         last = r;
         //System.out.println(t1);
         if(j<p.length){
-          if (p[j] == '*') {
+          if (p[j] == '*'){
               j++;
-              setState(state, BR, state + 1, t1);
-              if(f>= 0)
-              {
-                  
-                  next1[f] = next2[f] = state;
+
+              setState(state, BR, state + 1, state+1);
+
+              //Special case for if it starts with an or statement
+              if(f >= 0){
+                  next1[f] = next2[f] = state+1;
               }
+
+              state++;
+              //set the next state, which will be the statring state of the machine, to branch to the end or the start of the previously set machine.
+              setState(state, BR, state+1, t1);
+
               r = state;
               state++;
               
@@ -197,6 +207,7 @@ public class REcompiler {
             j++;
             //set the current state as a simple dummy state, which will skip over the next state to the end
             setState(state, BR, state + 2, state +2);
+
             state++;
             //set the next state, which will be the statring state of the machine, to branch to the end or the start of the previously set machine. 
             setState(state, BR, state +1, r);
@@ -207,6 +218,11 @@ public class REcompiler {
               }
             r = state;
             state++;
+
+           
+          }
+          
+
           }
           
         }
