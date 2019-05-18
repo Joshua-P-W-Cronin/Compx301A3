@@ -24,6 +24,7 @@ public class REcompiler {
     static int start = 0;
     static boolean startSet = false;
     static boolean newEnter = false;
+    static String currList = "";
 	//static final char BR = '!';	
 	static final String BR = "BRANCH";
 
@@ -119,16 +120,67 @@ public class REcompiler {
             r = state;
             state++;
             return r;
-        }
-
-        else{
-			
-           error();
-        }
-        
-
-        return r;
     }
+    else if(p[j] == '['){
+      j++;
+      currList = "LIST " + p[j];
+      j++;
+      list();
+
+      if (j< p.length && p[j] == ']') {
+          j++;
+      }
+      else {
+          error();
+      }
+      setState(state, currList, state + 1, state + 1);
+      r = state;
+      state++;
+      return r;
+    }
+    else if(p[j] == '^'){
+      j++;
+      if(p[j] =='['){
+        j++;
+        currList = "NOTLIST " + p[j];
+        j++;
+        list();
+
+        if (j< p.length && p[j] == ']') {
+            j++;
+        }
+        else {
+            error();
+        }
+        setState(state, currList, state + 1, state + 1);
+        r = state;
+        state++;
+        return r;
+      }
+      else{
+        error();
+      }
+    }
+
+    else{
+	
+       error();
+    }
+      
+
+    return r;
+    }
+    public static void list(){
+      if(p[j]!= ']'){
+
+        currList += p[j];
+        j++;
+
+        list();
+      }
+      return;
+    }
+
 
 
     public static int expression() {
@@ -230,9 +282,6 @@ public class REcompiler {
           
         }
         return r;
-    }
-    public static void list(){
-
     }
 
 
