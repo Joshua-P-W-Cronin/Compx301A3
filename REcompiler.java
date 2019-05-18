@@ -22,7 +22,10 @@ public class REcompiler {
     //start state of preceding machine
     static int preceding;
     //Branching state
-	//static final char BR = '!';
+
+    static int last = 0;
+	//static final char BR = '!';	
+
 	static final String BR = "BRANCH";
 
     public static void main(String[] args) {
@@ -76,6 +79,7 @@ public class REcompiler {
         int r = 0;
         if (isVocab(p[j])) {
             setState(state, Character.toString(p[j]), state + 1, state + 1);
+            last = state;
             j++;
             r = state;
             state++;
@@ -88,6 +92,7 @@ public class REcompiler {
             //Set the state machine with whatever matches next
             setState(state, Character.toString(p[j]), state + 1, state + 1);
             j++;
+            last = state;
             r = state;
             state++;
             return r;
@@ -108,6 +113,7 @@ public class REcompiler {
 
 			setState(state, "WILDCARD", state + 1, state + 1);
             j++;
+            last = state;
             r = state;
             state++;
             return r;
@@ -127,13 +133,43 @@ public class REcompiler {
     public static int expression() {
 
         int r;
-        r = term();
+        int t1;
+        r = t1= term();
         if (j < p.length) {
           if (isVocab(p[j]) || p[j] == '(' || p[j] =='\\' || p[j] == '.') {
             expression();
           }
-          else{
-            //error();
+          else if (p[j] == '|') {
+            int f, t2;
+            f = state -1;
+            
+            //Special case for if it starts with an or statement
+            if(f == -1){
+    
+                setState(state, BR, 1, 1);
+
+
+                f = 0;
+            }
+
+            if (next1[f] == next2[f]) {
+                next2[f] = state;
+            }
+
+            next1[f] = state;
+
+            f = state - 1;
+            j++;
+            r = state;
+            state++;
+            t2 = term();
+            setState(r, BR, t1, t2);
+            last = r;
+            if (next1[f] == next2[f]) {
+                next2[f] = state;
+
+            }
+            next1[f] = state;
           }
         }
         return r;
@@ -145,71 +181,50 @@ public class REcompiler {
         f = state - 1;
 
         r = t1 = factor();
+        last = r;
         //System.out.println(t1);
         if(j<p.length){
           if (p[j] == '*'){
               j++;
+
               setState(state, BR, state + 1, state+1);
 
               //Special case for if it starts with an or statement
-              if(f != -1){
+              if(f >= 0){
                   next1[f] = next2[f] = state+1;
               }
 
               state++;
               //set the next state, which will be the statring state of the machine, to branch to the end or the start of the previously set machine.
-              setState(state, BR, r, state +1);
+              setState(state, BR, state+1, t1);
 
               r = state;
               state++;
+              
           }
           else if(p[j] == '?'){
             //similar to * but need to change previous state to go to state if it matches,
             j++;
             //set the current state as a simple dummy state, which will skip over the next state to the end
             setState(state, BR, state + 2, state +2);
-            //Special case for if it starts with an or statement
 
-            if(f != -1){
-                next1[f] = next2[f] = state+1;
-            }
             state++;
-            //set the next state, which will be the statring state of the machine, to branch to the end or the start of the previously set machine.
-            setState(state, BR, r, state +1);
-
+            //set the next state, which will be the statring state of the machine, to branch to the end or the start of the previously set machine. 
+            setState(state, BR, state +1, r);
+            if(f>= 0)
+              {
+                  
+                  next1[f] = next2[f] = state;
+              }
             r = state;
             state++;
+
+           
           }
-          else if (p[j] == '|') {
-              //Special case for if it starts with an or statement
-              if(f == -1){
+          
 
-                  setState(state, BR, 1, 1);
-
-
-                  f = 0;
-              }
-
-              if (next1[f] == next2[f]) {
-                  next2[f] = state;
-              }
-
-              next1[f] = state;
-
-              f = state - 1;
-              j++;
-              r = state;
-              state++;
-              t2 = term();
-              setState(r, BR, t1, t2);
-              if (next1[f] == next2[f]) {
-                  next2[f] = state;
-
-              }
-              next1[f] = state;
-              setState(state, BR, state +1, state +1);
-              state ++;
           }
+          
         }
         return r;
     }
