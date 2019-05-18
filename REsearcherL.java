@@ -19,6 +19,10 @@ public class REsearcherL{
 		stateString = new String[100];
 		makeStateArray();
 
+		if(stateString[0] == null){
+			return;
+		}
+
 		for(int i =0; i < stateData.length; i++){
 			System.out.println(stateString[i] + ", " +stateData[i][0]+ ", " + stateData[i][1]);
 		}
@@ -28,9 +32,6 @@ public class REsearcherL{
 		
 		Search s = new Search(stateData, stateString, startingState);
 
-		if(s.stateData == null){
-			return;
-		}
 
 		try{
 			BufferedReader br = new BufferedReader(new FileReader(args[0]));
@@ -86,10 +87,6 @@ public class REsearcherL{
 			
 			while(scanner.hasNextLine()){
 				input = scanner.nextLine();
-				if(input.equals("Regular expression invalid")){
-					break;
-				}
-
 				if(input.equals("--+--+-+-+") || input.equals("s  ch 1 2")){
 					continue;
 				}
@@ -112,6 +109,10 @@ public class REsearcherL{
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+
+		if(stateString[0] == null){
+			return;
 		}
 		
 		//Trim the state array

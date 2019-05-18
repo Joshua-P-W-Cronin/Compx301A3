@@ -24,7 +24,6 @@ public class Search{
 
 
 		for(int i = 0; i <= input.length; i++){
-//			System.out.println("new deque");
 			if(checkDeque(new Deque(startIndex), i)){
 				return true;
 			}
@@ -39,12 +38,10 @@ public class Search{
 
 	public Boolean checkDeque(Deque d, int charIndex){
 
-//		d.print();
 		while(d.head != null){
 			int head = d.get();
 
 			if (stateString[head].equals("END")) {
-//				System.out.println("Match");
 				return true;
 			}
 
@@ -58,20 +55,34 @@ public class Search{
 				if (stateData[head][0] != stateData[head][1]) {
 					d.push(stateData[head][0]);
 				}
-//				d.print();
+				continue;
+			}
+
+			if(stateString[head].contains("NOTLIST")){
+				if(!(checkList(stateString[head].split("IST")[1], charIndex))){
+					charIndex ++;
+					d.enque(stateData[head][0]);
+					if (stateData[head][0] != stateData[head][1]) {
+						d.enque(stateData[head][1]);
+					}
+				}
 				continue;
 			}
 
 
-//			if (stateString[head].equals("WILDCARD")) {
-//				charIndex++;
-//				d.enque(stateData[head][0]);
-//				if (stateData[head][0] != stateData[head][1]) {
-//					d.enque(stateData[head][1]);
-//				}
-//				d.print();
-//				continue;
-//			}
+
+			if(stateString[head].contains("LIST")){
+				if(checkList(stateString[head].split("IST")[1], charIndex)){
+					charIndex ++;
+					d.enque(stateData[head][0]);
+					if (stateData[head][0] != stateData[head][1]) {
+						d.enque(stateData[head][1]);
+					}
+				}
+				continue;
+			}
+
+
 
 
 			if(Character.toString(input[charIndex]).equals(stateString[head]) || stateString[head].equals("WILDCARD")){
@@ -80,66 +91,33 @@ public class Search{
 				if (stateData[head][0] != stateData[head][1]) {
 					d.enque(stateData[head][1]);
 				}
-//				d.print();
 				continue;
 			}
 
 
 
+
+
 		}
 
 		return false;
 
 	}
 
+	public Boolean checkList(String list, int charIndex){
 
-	
-	
-	public Boolean searchString(String s){
-		input = s.toCharArray();
-			
-		
-		
-		for(int i =0; i <= input.length; i++){
+		char[] listChars = list.toCharArray();
 
-			if(checkState(startIndex, i)){
+		for (char c: listChars) {
+			if(c == input[charIndex]){
 				return true;
 			}
-			
-		}
-		return false;
-			
-	}
-	
-	public Boolean checkState(int stateIndex, int charIndex){
-		if(stateString[stateIndex].equals("WILDCARD")){
-			charIndex += 1;
-		}
-		if(charIndex >= input.length){
-			return false;
+
 		}
 
-		if((stateData[stateIndex][0] + stateData[stateIndex][1]) != 0){
-			if(Character.toString(input[charIndex]).equals(stateString[stateIndex]) || stateString[stateIndex].equals("BRANCH") ||stateString[stateIndex].equals("WILDCARD") ){	
-				if(checkState(stateData[stateIndex][0], charIndex++)){
-					return true;
-				}
-				if(checkState(stateData[stateIndex][1], charIndex++)){
-					return true;
-				}
-				return false;
-				
-			}
-			else{
-				return false;
-			}
-		}
-		else if(stateString[stateIndex].equals("END") && stateData[stateIndex][0] == 0 && stateData[stateIndex][1] == 0){
-			System.out.println("match");
-			return true;
-		}
-	
 		return false;
-		
+
 	}
+
+
 }
