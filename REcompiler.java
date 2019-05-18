@@ -121,9 +121,11 @@ public class REcompiler {
             state++;
             return r;
     }
+    //list
+
     else if(p[j] == '['){
       j++;
-      currList = "LIST " + p[j];
+      currList = "LIST" + p[j];
       j++;
       list();
 
@@ -138,11 +140,13 @@ public class REcompiler {
       state++;
       return r;
     }
+
+    //notlist
     else if(p[j] == '^'){
       j++;
       if(p[j] =='['){
         j++;
-        currList = "NOTLIST " + p[j];
+        currList = "NOTLIST" + p[j];
         j++;
         list();
 
@@ -171,7 +175,8 @@ public class REcompiler {
     return r;
     }
     public static void list(){
-      if(p[j]!= ']'){
+      
+      if((j< p.length) && (p[j]!= ']')){
 
         currList += p[j];
         j++;
@@ -183,7 +188,7 @@ public class REcompiler {
 
 
 
-    public static int expression() {
+    public static int expression(){
 
         int r;
         int t1;
