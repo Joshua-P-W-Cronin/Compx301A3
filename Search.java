@@ -24,7 +24,7 @@ public class Search{
 
 
 		for(int i = 0; i <= input.length; i++){
-			System.out.println("new deque");
+//			System.out.println("new deque");
 			if(checkDeque(new Deque(startIndex), i)){
 				return true;
 			}
@@ -39,12 +39,12 @@ public class Search{
 
 	public Boolean checkDeque(Deque d, int charIndex){
 
-		d.print();
+//		d.print();
 		while(d.head != null){
 			int head = d.get();
 
 			if (stateString[head].equals("END")) {
-				System.out.println("Match");
+//				System.out.println("Match");
 				return true;
 			}
 
@@ -58,7 +58,7 @@ public class Search{
 				if (stateData[head][0] != stateData[head][1]) {
 					d.push(stateData[head][0]);
 				}
-				d.print();
+//				d.print();
 				continue;
 			}
 
@@ -80,7 +80,7 @@ public class Search{
 				if (stateData[head][0] != stateData[head][1]) {
 					d.enque(stateData[head][1]);
 				}
-				d.print();
+//				d.print();
 				continue;
 			}
 

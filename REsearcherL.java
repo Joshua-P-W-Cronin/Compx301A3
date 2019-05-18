@@ -1,4 +1,7 @@
 import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class REsearcherL{
 	static int[][] stateData;
@@ -6,11 +9,16 @@ public class REsearcherL{
 	static int startingState;
 	
 	public static void main(String[] args){
-		
+
+		if(args.length != 1){
+			System.out.println("Please enter a file to search");
+			return;
+		}
+
 		stateData = new int[100][2];
 		stateString = new String[100];
 		makeStateArray();
-		
+
 		for(int i =0; i < stateData.length; i++){
 			System.out.println(stateString[i] + ", " +stateData[i][0]+ ", " + stateData[i][1]);
 		}
@@ -19,26 +27,47 @@ public class REsearcherL{
 		// }
 		
 		Search s = new Search(stateData, stateString, startingState);
-		
-		String pattern = "Hellozzzjacd";
-		
+
+		if(s.stateData == null){
+			return;
+		}
+
+		try{
+			BufferedReader br = new BufferedReader(new FileReader(args[0]));
+			String pattern = br.readLine();
+			while(pattern != null){
+				if(s.searchWithDeque(pattern)){
+					System.out.println(pattern);
+				}
+				pattern = br.readLine();
+			}
+
+			br.close();
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+//
+//
+//		String pattern = "Hellozzzjacd";
+//
 //		if(s.searchString(pattern)){
 //			System.out.println(pattern);
 //		}
 //		else{
 //			System.out.println("Not found");
 //		}
-
-		System.out.println("##########################################################################################");
-		System.out.println("chech with dick");
-		System.out.println("##########################################################################################");
-
-		if(s.searchWithDeque(pattern)){
-			System.out.println(pattern);
-		}
-		else{
-			System.out.println("Not found");
-		}
+//
+//		System.out.println("##########################################################################################");
+//		System.out.println("chech with dick");
+//		System.out.println("##########################################################################################");
+//
+//		if(s.searchWithDeque(pattern)){
+//			System.out.println(pattern);
+//		}
+//		else{
+//			System.out.println("Not found");
+//		}
 		
 
 		
@@ -57,6 +86,10 @@ public class REsearcherL{
 			
 			while(scanner.hasNextLine()){
 				input = scanner.nextLine();
+				if(input.equals("Regular expression invalid")){
+					break;
+				}
+
 				if(input.equals("--+--+-+-+") || input.equals("s  ch 1 2")){
 					continue;
 				}
@@ -73,12 +106,7 @@ public class REsearcherL{
 					stateData[indexArray][1] = Integer.parseInt(input.split(" ")[3]);
 					indexArray ++;
 				}
-				
-				
-	
-				
-				
-				
+
 			}
 		}
 		catch(Exception e)
