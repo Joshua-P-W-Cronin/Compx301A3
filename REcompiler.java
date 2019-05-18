@@ -64,10 +64,10 @@ public class REcompiler {
 
       //Look into this and why it doesnt work with ints
       while(!(ch[i].equals("END"))){
-          System.out.println(String.format("%1s|%10s %3s %4s", i, ch[i], next1[i], next2[i]));
+          System.out.println(String.format("%1s| %10s %3s %4s", i, ch[i], next1[i], next2[i]));
           i++;
       }
-        System.out.println(String.format("%1s|%10s %3s %4s", i, ch[i], next1[i], next2[i]));
+        System.out.println(String.format("%1s| %10s %3s %4s", i, ch[i], next1[i], next2[i]));
 		
 
 
@@ -146,6 +146,7 @@ public class REcompiler {
       j++;
       if(p[j] =='['){
         j++;
+        //if(j >=)
         currList = "NOTLIST" + p[j];
         j++;
         list();
