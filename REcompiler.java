@@ -289,7 +289,7 @@ public class REcompiler {
             r = state;
             state++;
             //Set t2 to be the entry point to the second term in the FSM, ie the term in alternation, and process it.
-            t2 = term();
+            t2 = expression();
             //start to t1
             setState(r, BR, start, t2);
 

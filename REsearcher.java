@@ -7,7 +7,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class REsearcherL{
+public class REsearcher{
 	//Array that holds index of current state and indexs of branching states
 	static int[][] stateData;
 	//String array that has the string/char each state is looking for
