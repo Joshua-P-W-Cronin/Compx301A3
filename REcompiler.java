@@ -1,11 +1,29 @@
+// Joshua Cronin 1212942
+// Luke Weston 
 ///SPECIAL STRINGS
 /// "END" -> end of finitite state machine
 /// "BRANCH" -> Branching state, not gonna look for a match
 /// "WILDCARD" = "." -> Matches anything
+/*
+ Context Free Grammar
+E -> T
+E -> T ?
+E -> T *
+E -> T E 
+E -> T | E
 
+T -> F
 
+F -> \ w
+F ->(E)
+F ->^[L]
+F ->[L]
+F -> . 
+F -> v
 
-
+L -> wL              L = list 
+L-> w                 w = any character
+*/
 
 public class REcompiler {
 
@@ -22,12 +40,15 @@ public class REcompiler {
     //Branching state
     static int enter = 0;
     static int start = 0;
+
     static boolean startSet = false;
     static boolean newEnter = false;
     static String currList = "";
 	//static final char BR = '!';	
 	static final String BR = "BRANCH";
-
+  ///
+  // Main method of the REcompiler, goes through the regex, parseing and compiling, and the if it is a valid machine, outputs the machine. 
+  ///
     public static void main(String[] args) {
         p = args[0].toCharArray();
         j = 0;
@@ -39,23 +60,25 @@ public class REcompiler {
 
         printMachine();
     }
-
+    //Parse() 
+    //start at the beginning of the regex and parse/compile the FSM
     public static void parse()
     {
       int initial;
-
+      //the starting point of the FSM is equal to the int returned from expression. 
       initial = expression();
+      //if we get to the end of the fsm with some input left to process, we have failed our parse. 
        if(j!= p.length){
           error();
         }
-      //if (p[j])
-      // error(); // In C, zero is false, not zero is true
+      //Set the ending state of the FSM  
       setState(state, "END", 0, 0);
-	  //setState(state, ' ', 0, 0);
-	   
+      //print the starting state of the fsm
       System.out.println("starting state = " + initial);
     }
-
+    /*
+    * Print the finite state machine 
+    */
     public static void printMachine(){
       System.out.println("s  ch 1 2");
       System.out.println("--+--+-+-+");
@@ -73,15 +96,20 @@ public class REcompiler {
 
 
     }
-
+    /*
+    * look for a factor at position j in the input
+    */
     public static int factor() {
-      
+        //r is the point of entry to the state machine
         int r = 0;
+        //if the current token is in our vocab, ie it is v in V , create the state, and branch 
         if (isVocab(p[j])) {
             setState(state, Character.toString(p[j]), state + 1, state + 1);
-            
+            //process the input by incrementing the counter
             j++;
+            //the start state is equal to the entry point for this state
             r = state;
+            //increment the current state being looked at
             state++;
             return r;
         }
@@ -122,17 +150,18 @@ public class REcompiler {
             return r;
     }
     //list
-
+    //if the current token is a listr start, ensure there is more input, and begin to process the list
     else if(p[j] == '['){
       j++;
       if(j >= p.length){
           error();
         }
+      //consume the first input in the list and then continue looking for a list. the list cannot be empty,
       currList = "LIST" + p[j];
 
       j++;
       list();
-
+      //if we arent looking at a ] then we have failed our parse, break. 
       if (j< p.length && p[j] == ']') {
           j++;
       }
@@ -209,7 +238,7 @@ public class REcompiler {
           startSet = true;
         }
         if (j < p.length) {
-          if (isVocab(p[j]) || p[j] == '(' || p[j] =='\\' || p[j] == '.') {
+          if (isVocab(p[j]) || p[j] == '(' || p[j] =='\\' || p[j] == '.'||p[j] == '[') {
            enter = expression();
            if(newEnter){
             r = enter;
@@ -243,6 +272,7 @@ public class REcompiler {
             r = state;
             state++;
             t2 = term();
+            //start to t1
             setState(r, BR, start, t2);
             
             if (next1[f] == next2[f]) {
@@ -254,6 +284,7 @@ public class REcompiler {
             newEnter = true;
           }
         }
+
         
         return r;
     }
