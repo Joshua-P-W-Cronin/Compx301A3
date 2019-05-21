@@ -306,8 +306,9 @@ public class REcompiler {
 
         return r;
     }
-
-
+    /*
+    * Term matched a factor and then if ther is any legal term operation left, consume that character in the input and create the corresponding machine. 
+    */
     public static int term() {
         int f, r, t1, t2;
         f = state - 1;
@@ -349,20 +350,26 @@ public class REcompiler {
         return r;
     }
 
-
+    /*
+    * Set the current state in the fsm at position s, with string c, and poitn next 1 at s1, next2 at s2
+    */
     public static void setState(int s, String c, int s1, int s2) {
         ch[s] = c;
         next1[s] = s1;
         next2[s] = s2;
     }
 
-
+    /*
+    * throw an error if the Regular expression is invalid
+    */
     public static void error(){
         System.err.println("Regular expression invalid");
         System.exit(0);
 
-    }
-
+    } 
+    /*
+    * Check if the input is legal vocabulary, ie is the churrent character v. 
+    */
     public static boolean isVocab(char c){
 
         char[] illegalChars = new char[] {'(',')','.','|','*','^','[',']','?','\\'};
