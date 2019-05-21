@@ -1,9 +1,12 @@
 // Joshua Cronin 1212942
-// Luke Weston 
+// Luke Weston 1336265
 ///SPECIAL STRINGS
 /// "END" -> end of finitite state machine
 /// "BRANCH" -> Branching state, not gonna look for a match
 /// "WILDCARD" = "." -> Matches anything
+/// "LIST " + string = "[string]" 
+/// "NOTLIST " + string = "^[string]"
+
 /*
  Context Free Grammar
 E -> T
