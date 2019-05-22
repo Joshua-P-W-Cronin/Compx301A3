@@ -8,14 +8,14 @@
 /// "NOTLIST " + string = "^[string]"
 
 /*
- Context Free Grammar
+Context Free Grammar
 E -> T
-E -> T ?
-E -> T *
 E -> T E
 E -> T | E
 
 T -> F
+T -> F ?
+F -> F *
 
 F -> \ w
 F ->(E)
@@ -55,14 +55,16 @@ public class REcompiler {
     public static void main(String[] args) {
         p = args[0].toCharArray();
         j = 0;
-        next1 = new int[100];
-        next2 = new int[100];
-        ch = new String[100];
+        next1 = new int[p.length * 100];
+        next2 = new int[p.length *100];
+        ch = new String[p.length * 100];
         state = 0;
         parse();
 
         printMachine();
     }
+
+
     //Parse()
     //start at the beginning of the regex and parse/compile the FSM
     public static void parse()

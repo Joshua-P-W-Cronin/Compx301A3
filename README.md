@@ -1,17 +1,40 @@
 # Compx301A3
+
+Joshua Cronin 1212942
+Luke Weston 1336265
 _______
 **Assignment description:**
 
 https://www.cs.waikato.ac.nz/~tcs/COMPX301/assign3-2019.html
 
 _______
-**Tony's Notes:**
+**Usage:**
 
-https://www.cs.waikato.ac.nz/~tcs/COMP317/rgfsm.html
+java REcompiler "<<YourRegEX>>" | java REsearcher <<YourtextFileGoesHere>>
 
-https://www.cs.waikato.ac.nz/~tcs/COMP317/cfgparsing.html
+Where <<YourRegEx>> is of the form of a regular expression
+
+Which is well formed according to the following Grammar
 _______
 
-**Google Doc:**
+**Context Free Grammar**
 
-https://docs.google.com/document/d/1pNW8Vah__KbbCR9Pksx8WttD1fEKIM4XpjBXTeggPaw/edit?usp=sharing
+- E -> T
+- E -> T E
+- E -> T | E
+
+- T -> F
+- T -> F ?
+- F -> F *
+
+- F -> \ w
+- F ->(E)
+- F ->^[L]
+- F ->[L]
+- F -> .
+- F -> v
+
+- L -> wL              L = list
+- L-> w                 w = any character
+
+_______
