@@ -14,7 +14,7 @@ public class REsearcher{
 	static String[] stateString;
 	//Starting state of the searcher
 	static int startingState;
-	
+
 	public static void main(String[] args){
 		//check a file has been passed in
 		if(args.length != 1){
@@ -31,11 +31,11 @@ public class REsearcher{
 		if(stateString[0] == null){
 			return;
 		}
-		
-		//Print out the parsed complied regular expression
-		for(int i =0; i < stateData.length; i++){
-			System.out.println(stateString[i] + ", " +stateData[i][0]+ ", " + stateData[i][1]);
-		}
+
+		// //Print out the parsed complied regular expression
+		// for(int i =0; i < stateData.length; i++){
+		// 	System.out.println(stateString[i] + ", " +stateData[i][0]+ ", " + stateData[i][1]);
+		// }
 
 		//create a new Search object with parsed state data
 		Search s = new Search(stateData, stateString, startingState);
@@ -59,14 +59,14 @@ public class REsearcher{
 		}
 
 
-		
-		
+
+
 	}
-	
-	
+
+
 	//Makes state arrays by reading in the output of REcomplier from System.in
 	public static void makeStateArray(){
-		
+
 		//keeps track of where items are going to be put in array
 		int indexArray = 0;
 
@@ -74,7 +74,7 @@ public class REsearcher{
 		try{
 			Scanner scanner = new Scanner(System.in);
 			String input = "";
-			
+
 			while(scanner.hasNextLine()){
 				input = scanner.nextLine();
 				//Lines used for formatting, skip
@@ -84,7 +84,7 @@ public class REsearcher{
 				//Get starting index
 				else if(input.split(" ")[0].equals("starting")){
 					startingState = Integer.parseInt(input.split(" ")[3]);
-					
+
 				}
 				//else parse data into arrays
 				else{
@@ -100,6 +100,7 @@ public class REsearcher{
 				}
 
 			}
+			scanner.close();
 		}
 		catch(Exception e)
 		{
@@ -109,32 +110,29 @@ public class REsearcher{
 		if(stateString[0] == null){
 			return;
 		}
-		
+
 		//Trim the state array
 		int size = 0;
 		for(String state : stateString){
-			size ++;			
+			size ++;
 			if(state.equals("END")){
 				break;
 			}
 		}
 
-		
+
 		int[][] temp = new int[size][2];
 		String[] temp2 = new String[size];
-		
+
 		for(int i =0; i < size; i++){
 			temp[i] = stateData[i];
 			temp2[i] = stateString[i];
 		}
 		stateData = temp;
 		stateString = temp2;
-		
+
 
 	}
-			
-	
+
+
 }
-
-
-		
