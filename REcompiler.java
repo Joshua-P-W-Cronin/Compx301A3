@@ -42,7 +42,7 @@ public class REcompiler {
     static int state;
     //Branching state
     static int enter = 0;
-    static int start = 0;
+
 
     static boolean startSet = false;
     static boolean newEnter = false;
@@ -69,7 +69,7 @@ public class REcompiler {
     {
       int initial;
       //the starting point of the FSM is equal to the int returned from expression.
-      initial = expression();
+      initial = expression(0);
       //if we get to the end of the fsm with some input left to process, we have failed our parse.
        if(j!= p.length){
           error();
@@ -130,7 +130,7 @@ public class REcompiler {
         }
         else if (p[j] == '(') {
             j++;
-            r = expression();
+            r = expression(state);
             //Need to check the length of j here else we will go off the edge.
             if (j< p.length && p[j] == ')') {
                 j++;
@@ -237,13 +237,15 @@ public class REcompiler {
     /*
     * Expression will parse a finite state machine recursively if there is input to continue doing so
     */
-    public static int expression(){
+    public static int expression(int start){
         //The state to return, ie the starting state
-        int r;
+        int r = 0;
         //the first term which will be stored.
-        int t1;
-        //set t1 to be r to be the reult of term.
+        int t1 = 0;
         r = t1= term();
+        //set t1 to be r to be the reult of term.
+
+
         //if this is the first state of the fsm, save the starting position.
         if (!startSet){
           start = r;
@@ -253,7 +255,7 @@ public class REcompiler {
         if (j < p.length) {
           //if the current charachter to parse is legal, or is an escape character,  or is a wildcard or a open brakcet,  we can call expression again.
           if (isVocab(p[j]) || p[j] == '(' || p[j] =='\\' || p[j] == '.'||p[j] == '[') {
-           enter = expression();
+           enter = expression(start);
            //save the new entry point into the fsm
            if(newEnter){
             r = enter;
@@ -263,6 +265,7 @@ public class REcompiler {
           }
           else if (p[j] == '|') {
             int f, t2;
+
             //make a dummy state so it is easy to redirect states
             setState(state, BR, state+1, state+1);
             state++;
@@ -289,9 +292,14 @@ public class REcompiler {
             r = state;
             state++;
             //Set t2 to be the entry point to the second term in the FSM, ie the term in alternation, and process it.
-            t2 = term();
+            t2 = expression(state);
             //start to t1
+
+
             setState(r, BR, start, t2);
+
+
+
 
             if (next1[f] == next2[f]) {
                 next2[f] = state;
@@ -307,10 +315,10 @@ public class REcompiler {
         return r;
     }
     /*
-    * Term matched a factor and then if ther is any legal term operation left, consume that character in the input and create the corresponding machine. 
+    * Term matched a factor and then if ther is any legal term operation left, consume that character in the input and create the corresponding machine.
     */
     public static int term() {
-        int f, r, t1, t2;
+        int f, r, t1;
         f = state - 1;
 
         r = t1 = factor();
@@ -366,9 +374,9 @@ public class REcompiler {
         System.err.println("Regular expression invalid");
         System.exit(0);
 
-    } 
+    }
     /*
-    * Check if the input is legal vocabulary, ie is the churrent character v. 
+    * Check if the input is legal vocabulary, ie is the churrent character v.
     */
     public static boolean isVocab(char c){
 
