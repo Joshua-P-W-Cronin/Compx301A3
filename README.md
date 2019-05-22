@@ -34,7 +34,10 @@ _______
 - F -> .
 - F -> v
 
-- L -> wL              L = list
-- L-> w                 w = any character
+- L -> wL              
+- L-> w                
 
+L = list
+w = any character
+v = any vocabular item which is not a special symbol
 _______
