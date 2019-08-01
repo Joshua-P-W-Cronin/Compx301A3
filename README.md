@@ -5,6 +5,9 @@ Luke Weston 1336265
 _______
 **Assignment description:**
 
+The task was to create a regular expression compiler, which validates and compiles a regular expression into a finte state machine, which is output through std.out, and passed into a Regular Expression text searcher, which uses a dequeue.
+
+
 https://www.cs.waikato.ac.nz/~tcs/COMPX301/assign3-2019.html
 
 _______
